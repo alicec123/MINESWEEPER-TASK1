@@ -73,6 +73,7 @@ def insert_mines(board, positions):
     Pre conditions : None
     Post condition : The output should display the list as a 5 x 5 board form.
     """
+    # Using a for loop, insert 'X' as a mine at the index.
     size = 5
     for pos in positions:
         row, col = pos
@@ -146,7 +147,7 @@ def play_turn(board, row, column):
     is_mine_selected = False
 
     # Calculates the index of a specified position on the board
-    index = row * size + column
+    index = (row * size + column)
 
     # Check if specified position is a mine or not
     if board[index] == 'X':
