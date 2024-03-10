@@ -24,9 +24,7 @@ def initialise_board():
 def display_board(board):
     """
     This function displays the list to screen as a 5 x 5 board. "O", spaces and number of adjacent mines will be
-    displayed, however, mines "X" should still be displayed as "O". The function uses a nested for loop to iterate
-    through the list using an index, checking whether the mine is hidden or not. It then uses the print() function to
-    print a new line every 5 squares.
+    displayed, however, mines "X" should still be displayed as "O".
 
     Arguments
     ---------
@@ -42,7 +40,8 @@ def display_board(board):
     Pre conditions : None
     Post condition : The output should display the list as a 5 x 5 board form.
     """
-    # Nested for loop will index at each element and check for a mine.
+    # Nested for loop will index at each element and check for a mine. At the end of each row of 5, it prints
+    # a new line
     size = 5
     for i in range(size):
         for j in range(size):
@@ -225,7 +224,6 @@ def play_game(positions):
 
         # Play a turn
         updated_board, is_mine_selected = play_turn(minesweeper_board, row, column)
-
         # Display the updated board
         display_board(updated_board)
 
