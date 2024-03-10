@@ -26,18 +26,19 @@ def test_inserting_mines():
                       'O', 'O', 'O', 'O', 'O'])
 
 
-def test_playing_turn():        # Two outputs, board and True/False???
+def test_playing_turn():
     board = ['O', 'O', 'O', 'O', 'O',
              'O', 'O', 'O', 'O', 'O',
              'O', 'O', 'X', 'O', 'O',
              'O', 'O', 'O', 'O', 'O',
              'O', 'O', 'O', 'O', 'O']
-    play_turn(board, 2, 2)
-    assert (board == ['O', 'O', 'O', 'O', 'O',
-                      'O', 'O', 'O', 'O', 'O',
-                      'O', 'O', '#', 'O', 'O',
-                      'O', 'O', 'O', 'O', 'O',
-                      'O', 'O', 'O', 'O', 'O'])
+    updated_board, is_mine_selected = play_turn(board, 2, 2)
+    assert (updated_board == ['O', 'O', 'O', 'O', 'O',
+                              'O', 'O', 'O', 'O', 'O',
+                              'O', 'O', '#', 'O', 'O',
+                              'O', 'O', 'O', 'O', 'O',
+                              'O', 'O', 'O', 'O', 'O'])
+    assert is_mine_selected == True
 
 
 def test_checking_win():
@@ -46,5 +47,5 @@ def test_checking_win():
              ' ', ' ', ' ', '2', ' ',
              ' ', ' ', '1', 'X', '1',
              ' ', ' ', ' ', '1', ' ']
-    check_win(board)
-    assert True
+    result = check_win(board)
+    assert result == True

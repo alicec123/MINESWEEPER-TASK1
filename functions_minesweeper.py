@@ -1,9 +1,48 @@
 def initialise_board():
+    """
+    This function initialises the minesweeper grid.
+
+    Arguments
+    ---------
+    This function takes no inputs.
+
+    Returns
+    ---------
+    board (list) : 1D list representing the minesweeper board. It contains 25 items, with each item being
+    the string "O", representing a square that has not yet been selected in the game.
+
+    Notes
+    ---------
+    Pre conditions : None
+    Post condition : The returned board is a list of 25 ‘O’s representing unselected values
+    """
+    # A single 'O' string multiplied by 25 to generate the board in 1D form.
     board = ['O'] * 25
     return board
 
 
 def display_board(board):
+    """
+    This function displays the list to screen as a 5 x 5 board. "O", spaces and number of adjacent mines will be
+    displayed, however, mines "X" should still be displayed as "O". The function uses a nested for loop to iterate
+    through the list using an index, checking whether the mine is hidden or not. It then uses the print() function to
+    print a new line every 5 squares.
+
+    Arguments
+    ---------
+    board : This function has one input, the list that represents the board, as generated in the function
+    initialise_board.
+
+    Returns
+    ---------
+    This function has no outputs.
+
+    Notes
+    ---------
+    Pre conditions : None
+    Post condition : The output should display the list as a 5 x 5 board form.
+    """
+    # Nested for loop will index at each element and check for a mine.
     size = 5
     for i in range(size):
         for j in range(size):
@@ -12,10 +51,28 @@ def display_board(board):
                 print('O', end=' ')
             else:
                 print(board[index], end=' ')
-        print()     # Prints a new line after each row of 5
+        print()
 
 
 def insert_mines(board, positions):
+    """
+    This function inserts mines at the specified positions. The mines are denoted by the character 'X'.
+
+    Arguments
+    ---------
+    board : A list representing the board
+    positions : A list of lists representing each mine location. The first index represents the row (0-4) and
+    the second index represents the column (0-4).
+
+    Returns
+    ---------
+    Output 1 : A list representing the updated board.
+
+    Notes
+    ---------
+    Pre conditions : None
+    Post condition : The output should display the list as a 5 x 5 board form.
+    """
     size = 5
     for pos in positions:
         row, col = pos
@@ -25,33 +82,73 @@ def insert_mines(board, positions):
 
 
 def count_adjacent_mines(board, row, column):
+    """
+    This function counts the number of mines, "X", adjacent to the selected row and column position.
+
+    Arguments
+    ---------
+    board : A list representing the board
+    row : An int representing the row (0-4) of the square being checked for adjacent mines.
+    column : An int representing the column (0-4) of the square being checked for adjacent mines.
+
+    Returns
+    ---------
+    Output 1 : An int representing the number of adjacent mines.
+
+    Notes
+    ---------
+    Pre conditions : None
+    Post condition : None
+    """
+
     size = 5
-    mine_count = 0
+    count_mine = 0
 
-    # Check above
+    #  Checking the square above
     if row > 0 and board[(row - 1) * size + column] == 'X':
-        mine_count += 1
-    # Check below
+        count_mine += 1
+    # Checking the square below
     if row < size - 1 and board[(row + 1) * size + column] == 'X':
-        mine_count += 1
-    # Check left
+        count_mine += 1
+    # Checking the square to the left
     if column > 0 and board[row * size + (column - 1)] == 'X':
-        mine_count += 1
-    # Check right
+        count_mine += 1
+    # Checking the square to the right
     if column < size - 1 and board[row * size + (column + 1)] == 'X':
-        mine_count += 1
+        count_mine += 1
 
-    return mine_count
+    return count_mine
 
 
 def play_turn(board, row, column):
+    """
+    This function plays a turn using the provided row and column on the board. If a hidden mine is selected, it
+    is changed to a "#" character. Otherwise, the number of adjacent mines to the selected position will replace
+    the existing character. If there are no adjacent mines, the space character " " replaces the selected position.
+
+    Arguments
+    ---------
+    board : A list representing the board
+    row : An int representing the row (0-4) of the square being selected.
+    column : An int representing the column (0-4) of the square being selected.
+
+    Returns
+    ---------
+    Output 1 : a list representing the updated board.
+    Output 2 : a bool with value "True" if a mine is selected, otherwise "False".
+
+    Notes
+    ---------
+    Pre conditions: None
+    Post condition: None
+    """
     size = 5
     is_mine_selected = False
 
-    # Calculate the index of selected position
+    # Calculates the index of a specified position on the board
     index = row * size + column
 
-    # Check if selected position is a mine
+    # Check if specified position is a mine or not
     if board[index] == 'X':
         board[index] = '#'
         is_mine_selected = True
@@ -68,6 +165,23 @@ def play_turn(board, row, column):
 
 
 def check_win(board):
+    """
+    This function determines if a player has won the game. This occurs when all positions that do not contain a
+    mine have been selected.
+
+    Arguments
+    ---------
+    board : A list representing the board.
+
+    Returns
+    ---------
+    Output 1 : A bool representing if the game as been won (True) or has not been won (False).
+
+    Notes
+    ---------
+    Pre conditions: None
+    Post condition: None
+    """
     for space in board:
         if space == 'O':
             return False
@@ -75,34 +189,53 @@ def check_win(board):
 
 
 def play_game(positions):
+    """
+    This function plays the game from start to finish! The function play_game calls other functions created earlier.
+
+    Arguments
+    ---------
+    positions : A list of lists indicating the positions that the mines will be placed in the board.
+
+    Returns
+    ---------
+    This function has no outputs.
+
+    Notes
+    ---------
+    Pre conditions: The board should first be initialised and have mines inserted at locations indicated by the input.
+                    It should also display the initial state of the board with the mines hidden.
+    Post condition: None
+    """
     # Initialize the board
     minesweeper_board = initialise_board()
-    # Insert the new mines
+
+    # Inserting the new mines
     insert_mines(minesweeper_board, positions)
 
-    # Display the initial board (with our hidden mines 'X' as 'O')
+    # Display the initial board as the original board with mines hidden as 'O's
     print("Starting board:")
     display_board(minesweeper_board)
 
-    # Play the game until it's won or lost
+    # Play the game until it has been won or lost
     while True:
-        # Obtain the row and column from user
+        # Obtain the row and column input from the user's end
         user_input = input("Enter row and column (separated by space): ")
         row, column = map(int, user_input.split())
 
         # Play a turn
         updated_board, is_mine_selected = play_turn(minesweeper_board, row, column)
 
-        # Display updated board
+        # Display the updated board
         display_board(updated_board)
 
-        # Check if the game has been won
+        # Check if the game has been won. If won, it prints out a message.
         if check_win(updated_board):
-            print("Congratulations! You've won the game!")
+            print("Congratulations, you have won the game!")
             break
-        # Check if a mine is selected
+
+        # If a mine has been selected, the game is over. It prints out a "game over" message.
         elif is_mine_selected:
-            print("Oh no! You've selected a mine. Game over!")
+            print("Game over! You've selected a mine. Better luck next time!")
             break
 
 
