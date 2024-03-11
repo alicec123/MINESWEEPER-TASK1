@@ -41,11 +41,11 @@ def display_board(board):
     Post condition : The output should display the list as a 5 x 5 board form.
     """
     # Nested for loop will index at each element and check for a mine. At the end of each row of 5, it prints
-    # a new line
-    size = 5
-    for i in range(size):
-        for j in range(size):
-            index = i * size + j
+    # a new line to create the 2D shape.
+    board_size = 5
+    for i in range(board_size):
+        for j in range(board_size):
+            index = i * board_size + j
             if board[index] == 'X':
                 print('O', end=' ')
             else:
@@ -83,7 +83,7 @@ def insert_mines(board, positions):
 
 def count_adjacent_mines(board, row, column):
     """
-    This function counts the number of mines, "X", adjacent to the selected row and column position.
+    This function counts the sum of the mines, "X", adjacent and/or diagonal to the selected row and column position.
 
     Arguments
     ---------
@@ -93,28 +93,47 @@ def count_adjacent_mines(board, row, column):
 
     Returns
     ---------
-    Output 1 : An int representing the number of adjacent mines.
+    Output 1 : An int representing the number of adjacent/diagonal mines.
 
     Notes
     ---------
     Pre conditions : None
     Post condition : None
     """
-
-    size = 5
+    # Declare the size of board and initial count for the mines
+    board_size = 5
     count_mine = 0
 
-    #  Checking the square above
-    if row > 0 and board[(row - 1) * size + column] == 'X':
+    # Check the above three elements to see if a mine exists. If a mine is found, add 1 to the count
+    if row > 0:
+        # Above the selected element
+        if board[(row - 1) * board_size + column] == 'X':
+            count_mine += 1
+        # Above (diagonal) left
+        if (column > 0) and board[(row - 1) * board_size + (column - 1)] == 'X':
+            count_mine += 1
+        # Above (diagonal) right
+        if column < (board_size - 1) and board[(row - 1) * board_size + (column + 1)] == 'X':
+            count_mine += 1
+
+        # Check the bottom three elements to see if a mine exists
+    if row < board_size - 1:
+        # Below the selected element
+        if board[(row + 1) * board_size + column] == 'X':
+            count_mine += 1
+            # Below (diagonal) left
+        if (column > 0) and board[(row + 1) * board_size + (column - 1)] == 'X':
+            count_mine += 1
+        # Below (diagonal) right
+        if column < (board_size - 1) and board[(row + 1) * board_size + (column + 1)] == 'X':
+            count_mine += 1
+
+    # Check the right side element to see if a mine exists
+    if column < (board_size - 1) and board[row * board_size + (column + 1)] == 'X':
         count_mine += 1
-    # Checking the square below
-    if row < size - 1 and board[(row + 1) * size + column] == 'X':
-        count_mine += 1
-    # Checking the square to the left
-    if column > 0 and board[row * size + (column - 1)] == 'X':
-        count_mine += 1
-    # Checking the square to the right
-    if column < size - 1 and board[row * size + (column + 1)] == 'X':
+
+    # Check the left side element to see if a mine exists
+    if (column > 0) and board[row * board_size + (column - 1)] == 'X':
         count_mine += 1
 
     return count_mine
@@ -146,7 +165,7 @@ def play_turn(board, row, column):
     is_mine_selected = False
 
     # Calculates the index of a specified position on the board
-    index = (row * size + column)
+    index = (row*size+column)
 
     # Check if specified position is a mine or not
     if board[index] == 'X':
@@ -222,7 +241,7 @@ def play_game(positions):
         user_input = input("Enter row and column (separated by space): ")
         row, column = map(int, user_input.split())
 
-        # Play a turn
+        # Call the play_turn function, then update the board
         updated_board, is_mine_selected = play_turn(minesweeper_board, row, column)
         # Display the updated board
         display_board(updated_board)
